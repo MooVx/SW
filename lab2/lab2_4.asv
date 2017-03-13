@@ -53,19 +53,21 @@ lena=imread('lena.bmp');
 
 theta = -45;
 
-wsp =0.1
+wsp =0.5
 
-pom = [ws 0 0;
-       0 0.5 0;
+pom = [wsp 0 0;
+       0 wsp 0;
        0 0 1]
-   
-M=[cosd(theta) -sind(theta) 0; sind(theta) cosd(theta) 0; 0 0 1]*pom
 
-tform = affine2d([cosd(theta) -sind(theta) 0; sind(theta) cosd(theta) 0; 0 0 1]*pom)
+tform = affine2d([1 0 0; 0 1 0; 0 0 1]*pom)
 
 
 
-B=imwarp(lena,tform);
+B=imwarp(lena,tform,'OutputView', imref2d(size(len)));
 
 figure(5);
 imshow(B)
+% imshow(imtranslate(lena,[50, -50]))
+
+
+

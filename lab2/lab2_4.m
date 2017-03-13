@@ -61,13 +61,18 @@ pom = [wsp 0 0;
 
 tform = affine2d([cosd(theta) -sind(theta) 0; sind(theta) cosd(theta) 0; 0 0 1]*pom)
 
-
-
 B=imwarp(lena,tform);
 
 figure(5);
 imshow(B)
+figure(6);
 imshow(imtranslate(lena,[50, -50]))
+
+tform = affine2d([1 0 0; 0 1 0; 50 -10  1])
+
+C=imwarp(lena,tform,'OutputView', imref2d(size(lena)));
+figure(7);
+imshow(C)
 
 
 
