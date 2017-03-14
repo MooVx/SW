@@ -1,0 +1,11 @@
+function LUT(obraz,przekodowanie)
+    subplot(3,1,1)
+    imshow(obraz)
+    title('orginal')
+    subplot(3,1,2)
+    imshow(intlut(obraz,przekodowanie))
+    title('zmodyfikowany')
+    subplot(3,1,3)
+    plot(przekodowanie)
+    title('LUT')
+end
