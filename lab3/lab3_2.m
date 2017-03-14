@@ -1,4 +1,4 @@
-
+%Operacje arytmetyczne
 clear all;
 close all;
 
@@ -91,26 +91,41 @@ mn=immultiply(lena16,jet16);
 
 figure(6);
 subplot(3,3,1:3)
-imshow(jet16)
+imshow(jet16,[])
 title('jet')
 
 subplot(3,3,4:6)
-imshow(lena16)
+imshow(lena16,[])
 title('lena')
 
+
 subplot(3,3,7)
-imshow(jet)
-title('orginal')
-subplot(3,3,5)
-imshow(imlincomb(6,jet))
+imshow(immultiply(lena16,jet16),[])
 title('lena x jet')
 
 
-subplot(3,3,3)
-imshow(jet)
-title('orginal')
-subplot(3,3,6)
-imshow(imlincomb(1,jet))
-title('zmodyfikowany')
+kolo=imread('kolo.bmp');
+
+subplot(3,3,8)
+imshow(immultiply(lena16,int16(kolo)),[])
+title('lena x kolo')
+
+
+kwadrat=imread('kwadrat.bmp');
+
+subplot(3,3,9)
+imshow(immultiply(lena16,int16(kwadrat)),[])
+title('lena x kwadrat')
+
+
+%%%%%%%%%%%% negatyw
+
+figure(7);
+imshow(imcomplement(lena16),[])
+title('lena negatyw')
+
+
+
+
 
 
