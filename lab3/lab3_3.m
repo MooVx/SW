@@ -10,13 +10,12 @@ kolo_b = boolean(kolo);
 kwadrat_b = boolean(kwadrat);
 
 figure(1);
-subplot(3,1,1)
-imshow(jet);
-title('jet')
-subplot(3,1,2)
-imshow(lena);
-title('lena')
-subplot(3,1,3)
-imshow(add,[]);
-title('add')
+subplot(2,2,1);
+imshow(kolo_b&kwadrat_b,[]);
+subplot(2,2,2);
+imshow(kolo_b|kwadrat_b,[]);
+subplot(2,2,3);
+imshow(~kwadrat_b,[]);
+subplot(2,2,4);
+imshow(xor(kolo_b,kwadrat_b),[]);
 
