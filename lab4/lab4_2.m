@@ -23,10 +23,12 @@ title('CLAHE')
 
 
 [H,x]=imhist(phobos);
-lm_b=round(mean(H));
+wsp=max(H)/256;
+H_8=uint8(H/wsp);
+lm_b=uint8(mean(H_8));
 C=cumsum(H);
 [X Y] = size(phobos);
-[value lm_d] = min( abs(C-(X*Y/2)))/max(H);
+[value lm_d] = min( abs(C-(X*Y/2)));
 
 H1=H(0 : lm_b);
 
