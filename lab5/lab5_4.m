@@ -1,5 +1,8 @@
 %Gradienty (wykorzystanie pierwszej pochodnej obrazu)
 
+clear all
+close all
+
 kw=imread('jet.bmp');
 load maskiPP;
 
@@ -81,32 +84,36 @@ subplot(1,3,3);
 imshow(abs(kw_s2),[]);
 title('abs');
 
-Sk=sqrt(S1.^2 +S2.^2)/9;
-kw_s2=uint8(conv2(double(kw),Sk,'same'));
+
+kw_s1=conv2(double(kw),S1,'same');
+kw_s2=conv2(double(kw),S2,'same');
+kw_sk=sqrt(kw_s1.^2 +kw_s2.^2);
 figure(7)
 subplot(1,3,1);
 imshow(kw);
 title('orginal');
+
 subplot(1,3,2);
-kw_s22=kw_s2+128;
-imshow(kw_s22,[]);
+imshow(kw_sk+128,[]);
 title('+128');
+
 subplot(1,3,3);
-imshow(abs(kw_s2),[]);
+imshow(abs(kw_sk),[]);
 title('abs');
 
-Sk=(abs(S1) +abs(S2))/9;
-kw_s2=uint8(conv2(double(kw),Sk,'same'));
+
+kw_s1=conv2(double(kw),S1,'same');
+kw_s2=conv2(double(kw),S2,'same');
+kw_sk=(abs(kw_s1) +abs(kw_s2));
 figure(8)
 subplot(1,3,1);
 imshow(kw);
 title('orginal');
 subplot(1,3,2);
-kw_s22=kw_s2+128;
-imshow(kw_s22,[]);
+imshow(kw_sk+128,[]);
 title('+128');
 subplot(1,3,3);
-imshow(abs(kw_s2),[]);
+imshow(abs(kw_sk),[]);
 title('abs');
 
 
