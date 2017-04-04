@@ -7,14 +7,14 @@ M = [0, 1, 0;
 
 M=M/9;
 
-moon_l=uint8(conv2(double(moon),M,'same'));
+moon_l=conv2(double(moon),M,'same');
 
 figure(1)
 subplot(1,3,1);
 imshow(moon);
 title('orginal');
 subplot(1,3,2);
-moon_l2=moon_l+128;
+moon_l2=uint8(moon_l+128);
 imshow(moon_l2,[]);
 title('+128');
 subplot(1,3,3);
