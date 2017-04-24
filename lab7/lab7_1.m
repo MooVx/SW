@@ -1,48 +1,55 @@
 clear all;
-knee=imread('knee.png');
-knee=double(knee);
-imshow(knee,[]);
-x_s=345;
-y_s=308;
+img=imread('knee.png');
+img=double(img);
+imshow(img,[]);
+[max_x max_y]=size(img);
 
-stos=zeros(2,40000);
-visited=uint8(zeros(779,693));
-segmented=uint8(zeros(779,693));
-  stos(1,1)=x_s;
-stos(2,1)=y_s;
+[y_ref x_ref]=ginput;
+x_ref =floor(x_ref )+1
+y_ref =floor(y_ref )+1
+stos=java.util.Stack();
+visited=uint8(zeros(max_x,max_y));
+visited(1,:)=1;
+visited(:,1)=1;
+visited(max_x,:)=1;
+visited(:,max_y)=1;
+segmented=(zeros(max_x,max_y));
+  
+stos.push([x_ref y_ref]);
 
-visited(1,x_s)=1;
-segmented(2,y_s)=1;
-lp=1
+visited(x_ref,y_ref)=1;
+segmented(x_ref,y_ref)=1;
+iter=0;
+
+triger=30;
+h=fspecial('gaussian',4,4);
     
-    triger=10
-   
-    index=1;
-    max_index=1;
     
-while index< max_index
+while not(stos.empty())
     
-    x=stos(1,index);
-    y=stos(2,index);
-    
+    top=stos.pop();
+    x=top(1,1);
+    y=top(2,1);
+ 
     for i=(x-1):(x+1)
         for j=(y-1):(y+1)
             if visited(i,j)==0
-                if abs(knee(x_ref,y_ref)-knee(i,j))<triger
-                    max_index=max_index+1;
+                if abs(img(x_ref,y_ref)-img(i,j))<triger
                     segmented(i,j)=1;
-                    stos(1,max_index)=i;
-                    stos(2,max_index)=j;
-                end
-            end
+                    stos.push([i j]);          
+                end               
+            end             
             visited(i,j)=1;
         end
     end
-    
-index=index+1;
-    
-    
+
+    if iter==1000
+        iter=0;
+        imshow(imfilter(img.*segmented,h),[])
+        drawnow;
+    end
+    iter=iter+1;    
 end
 
-imshow(segmented)
-imshow(visited,[])
+
+imshow(imfilter(img.*segmented,h),[])
