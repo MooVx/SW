@@ -2,7 +2,7 @@
 
 obraz=imread('bart.bmp');
 
-figure('Name','dwa progi',);
+figure('Name','dwa progi');
 subplot(1,3,1);
 imshow(obraz,[]);
 subplot(1,3,2);
