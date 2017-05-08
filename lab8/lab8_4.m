@@ -1,134 +1,68 @@
 close all;
-img=imread('ksztaltyReal.bmp');
-img=rgb2gray(img);
+clear all;
 
-level = graythresh(img)
-img = logical(1 - imbinarize(img,0.451));
-img = bwareafilt(img,[3000 500000]);
-img_8=uint8(bwlabel(img,4));
+ksztaltyReal = imread('ksztaltyReal.bmp');
+
 figure(1)
-imshow(img_8,[]);
-r = regionprops(img_8,'Centroid');
-for i=1:length(r)
-    text(r(i).Centroid(1),r(i).Centroid(2),['\color{magenta}',num2str(i)]);
+imshow(ksztaltyReal,[]);
+title('Original');
+
+[X,Y,Z] = size(ksztaltyReal);
+labeled(X,Y)=0;
+TH = 60;
+
+for i=1:X
+    for j=1:Y
+        
+        if ksztaltyReal(i,j,1)<TH && ksztaltyReal(i,j,2)<TH && ksztaltyReal(i,j,3)<TH
+             labeled(i,j) = 1;
+        else
+            labeled(i,j) = 0;
+        end
+        
+    end
 end
-title('orginal')
-
-[XX YY] = size(img_8);
-M=obliczWspolczynniki(img_8);
 
 
 
+M =[1 2 1;
+    2 4 2; 
+    1 2 1];
+M = M/sum(sum(M));
+filtered = conv2(labeled,M,'same');
 
 figure(2)
+imshow(filtered,[]);
+title('Filtered');
 
-subplot(2,3,1)
-img_8=uint8(bwlabel(img,8));
-for x=2:XX-1
-    for y=2:YY-1
-        if  img_8(x,y)~=0 && 0.3<M(img_8(x,y),1) &&  M(img_8(x,y),1)<0.62   &&...
-            img_8(x,y)~=0 && 0.5<M(img_8(x,y),2) &&  M(img_8(x,y),2)<0.7    &&...
-            img_8(x,y)~=0 && 4.8<M(img_8(x,y),3) &&  M(img_8(x,y),3)<5.3    &&...
-            img_8(x,y)~=0 && 0.972<M(img_8(x,y),4) &&  M(img_8(x,y),4)<0.985&&...
-            img_8(x,y)~=0 && 0.007<M(img_8(x,y),5) &&  M(img_8(x,y),5)<0.010 
-            
-        img_8(x,y)=0;
-        end
-    end
-end
-imshow(img_8,[]);
-r = regionprops(img_8,'Centroid');
+filtered = bwlabel(filtered,8);
+
+r = regionprops(filtered,'Centroid');
 for i=1:length(r)
     text(r(i).Centroid(1),r(i).Centroid(2),['\color{magenta}',num2str(i)]);
 end
-title('Combo')
 
+wspolczynniki = obliczWspolczynniki(filtered);
+[X,Y] = size(filtered);
+wydzielone(X,Y)=0;
 
-
-
-
-subplot(2,3,2)
-img_8=uint8(bwlabel(img,8));
-for x=2:XX-1
-    for y=2:YY-1
-        if img_8(x,y)~=0 && 0.3<M(img_8(x,y),1) &&  M(img_8(x,y),1)<0.62
-            img_8(x,y)=0;
+for i=1:X
+    for j=1:Y
+        
+        piksel = filtered(i,j);
+        if (piksel ~= 0 && (wspolczynniki(piksel,1) > 0.35 && wspolczynniki(piksel,1) < 0.6)...
+        && (wspolczynniki(piksel,2) > 0.5 && wspolczynniki(piksel,2) < 0.7)...
+        && (wspolczynniki(piksel,3) > 4.8 && wspolczynniki(piksel,3) < 5.2))
+             
+            wydzielone(i,j) = 1;
         end
+        
     end
 end
-imshow(img_8,[]);
-r = regionprops(img_8,'Centroid');
-for i=1:length(r)
-    text(r(i).Centroid(1),r(i).Centroid(2),['\color{magenta}',num2str(i)]);
-end
-title('Compactness')
 
-subplot(2,3,3)
-img_8=uint8(bwlabel(img,8));
-for x=2:XX-1
-    for y=2:YY-1
-        if img_8(x,y)~=0 && 0.5<M(img_8(x,y),2) &&  M(img_8(x,y),2)<0.7
-            img_8(x,y)=0;
-        end
-    end
-end
-imshow(img_8,[]);
-r = regionprops(img_8,'Centroid');
-for i=1:length(r)
-    text(r(i).Centroid(1),r(i).Centroid(2),['\color{magenta}',num2str(i)]);
-end
-title('Rmin/Rmax')
-
-subplot(2,3,4)
-img_8=uint8(bwlabel(img,8));
-for x=2:XX-1
-    for y=2:YY-1
-        if img_8(x,y)~=0 && 4.8<M(img_8(x,y),3) &&  M(img_8(x,y),3)<5.3
-            img_8(x,y)=0;
-        end
-    end
-end
-imshow(img_8,[]);
-r = regionprops(img_8,'Centroid');
-for i=1:length(r)
-    text(r(i).Centroid(1),r(i).Centroid(2),['\color{magenta}',num2str(i)]);
-end
-title('Blair - Bliss')
-
-subplot(2,3,5)
-img_8=uint8(bwlabel(img,8));
-for x=2:XX-1
-    for y=2:YY-1
-        if img_8(x,y)~=0 && 0.972<M(img_8(x,y),4) &&  M(img_8(x,y),4)<0.985
-            img_8(x,y)=0;
-        end
-    end
-end
-imshow(img_8,[]);
-r = regionprops(img_8,'Centroid');
-for i=1:length(r)
-    text(r(i).Centroid(1),r(i).Centroid(2),['\color{magenta}',num2str(i)]);
-end
-title('Haralick')
-
-subplot(2,3,6)
-img_8=uint8(bwlabel(img,8));
-for x=2:XX-1
-    for y=2:YY-1
-        if img_8(x,y)~=0 && 0.007<M(img_8(x,y),5) &&  M(img_8(x,y),5)<0.010
-            img_8(x,y)=0;
-        end
-    end
-end
-imshow(img_8,[]);
-r = regionprops(img_8,'Centroid');
-for i=1:length(r)
-    text(r(i).Centroid(1),r(i).Centroid(2),['\color{magenta}',num2str(i)]);
-end
-title('M7')
-
-
-
+figure(3);
+imshow(wydzielone,[]);
+title('Result');
 
 
 
