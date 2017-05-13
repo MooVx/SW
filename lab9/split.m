@@ -17,8 +17,8 @@ std_=std(area_v);
         split(img,x_prim,y_prim,x2,y2);
     else 
         index=index+1;
-        segRes(y1:y2,x1:x2) = index;
-        mean_(y1:y2,x1:x2) = meanLoc;
+        segRes(x1:x2,y1:y2) = index;
+        mean_(x1:x2,y1:y2) = meanLoc;
     end
 
 end
