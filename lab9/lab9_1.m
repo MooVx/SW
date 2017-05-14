@@ -1,7 +1,12 @@
+clear all;
+close all;
 global segRes trig_ min_ index mean_ sim;
 
+stos=java.util.Stack();
 
 img = imread('umbrealla.png');
+figure(1);
+imshow(img,[]);
 
 img_hsv=rgb2hsv(img);
 img_h=img_hsv(:,:,1);
@@ -17,38 +22,40 @@ y2=col;
 min_=4;
 trig_=0.02;
 index=1;
-sim =4;
+sim =6;
+cnt=0;
+split(img,x1,y1,x2,y2);
+figure(2);
+imshow(mean_,[]);
 
- split(img,x1,y1,x2,y2);
- 
- imshow(mean_,[]);
 
- n=index;
- for n=1:index
-     IB = segRes == n;
-     if any(IB)
-         continue;
-     end
-     IBDilate = imdilate(IB,strel('square',3));
-     IBDiff = IBDilate-IB;
-     IBMult = IBDiff.*segRes;
-     IBMultNZ = nonzeros(IBMult);
-     BUnique = unique(IBMultNZ);
-     
-     for i=1:length(BUnique)
-         IBS = segRes == BUnique(i);
-         [x,y]=find(IB,1,'first');
-         [xs,ys]=find(IBS,1,'first');
-         if abs(mean_(x,y)-mean_(xs,ys))<sim
-             segRes(IBS) = n;
-         end
-         
-     end
+for n=1:index
+    stos.push(n);
+end
 
- end
+while not(stos.empty())
+    n=stos.pop();
+    IB = segRes == n;
+    IBDilate = imdilate(IB,strel('square',3));
+    IBDiff = IBDilate-IB;
+    IBMult = IBDiff.*segRes;
+    IBMultNZ = nonzeros(IBMult);
+    BUnique = unique(IBMultNZ);
+    for i=1:length(BUnique)
+        IBS = segRes == BUnique(i);
+        [x,y]=find(IB,1,'first');
+        [xs,ys]=find(IBS,1,'first');
+        if abs(mean_(x,y)-mean_(xs,ys))<sim
+            segRes(IBS) = n;
+             stos.push(n);
+        end
+    end
 
- imshow(label2rgb(segRes),[]);
- 
- 
+end
+
+figure(3);
+imshow(label2rgb(segRes),[]);
+
+
  
  
