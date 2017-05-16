@@ -19,7 +19,7 @@ y1=1;
 x2=row;
 y2=col;
 
-min_=4;
+min_=8;
 trig_=0.02;
 index=1;
 sim =6;
