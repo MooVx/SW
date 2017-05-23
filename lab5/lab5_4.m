@@ -3,7 +3,7 @@
 clear all
 close all
 
-kw=imread('jet.bmp');
+kw=imread('kw.bmp');
 load maskiPP;
 
 kw_1=uint8(conv2(double(kw),R1,'same'));
