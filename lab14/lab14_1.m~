@@ -1,0 +1,9 @@
+close all;
+clear all;
+
+img=imread('lenaRGB.bmp');
+imgR=img(:,:,1);
+imgG=img(:,:,2);
+imgB=img(:,:,3);
+
+hist(
